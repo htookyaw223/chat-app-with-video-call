@@ -33,7 +33,7 @@ npm run dev
 ```bash
 cd chat-app-backend
 npm install
-npm run start
+npm start
 ```
 
 ## WebRTC Usage
