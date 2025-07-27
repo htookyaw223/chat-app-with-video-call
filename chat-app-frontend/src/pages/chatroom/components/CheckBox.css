@@ -1,0 +1,34 @@
+/* ChatBox.css */
+.chat-bubble {
+    display: inline-block;
+    padding: 10px;
+    margin: 5px;
+    max-width: 75%;
+    word-wrap: break-word;
+    border-radius: 10px;
+    position: relative;
+  }
+  
+  .sent {
+    background-color: #dcf8c6; /* WhatsApp green bubble for sent messages */
+    align-self: flex-end;
+    margin-left: auto;
+  }
+  
+  .received {
+    background-color: #fff; /* White bubble for received messages */
+    border: 1px solid #e5e5e5;
+    align-self: flex-start;
+  }
+  
+  .chat-text {
+    font-size: 14px;
+  }
+  
+  .chat-timestamp {
+    font-size: 12px;
+    color: #999;
+    text-align: right;
+    margin-top: 5px;
+  }
+  
