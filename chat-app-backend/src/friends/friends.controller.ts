@@ -6,6 +6,7 @@ export class FriendsController {
     constructor(private readonly friendsService: FriendsService) {}
     @Get("/:userId")
     async getFriends(@Param("userId") userId: string) {
+        console.log('Fetching friends for user:', userId);
        return this.friendsService.getFriends(userId);
     }
 }

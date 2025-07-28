@@ -1,21 +1,15 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { User, UserSchema } from './schemas/user.schema';
-import { SocketGateway } from 'src/chat/socket.gateway';
-import { SocketModule } from 'src/chat/socket.module';
-import {
-  SocketConnectedUser,
-  SocketConnectedUserSchema,
-} from './schemas/socket.user.schema';
+import { FriendsModule } from 'src/friends/friends.module';
+import { FriendsService } from 'src/friends/friends.service';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
-    MongooseModule.forFeature([
-      { name: SocketConnectedUser.name, schema: SocketConnectedUserSchema },
-    ]),
+    forwardRef(() => FriendsModule)
   ],
   providers: [UserService],
   controllers: [UserController],
