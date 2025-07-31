@@ -5,6 +5,9 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { SocketModule } from './chat/socket.module';
 import { FriendsModule } from './friends/friends.module';
+import { FriendRequestService } from './friend-request/friend-request.service';
+import { FriendRequestController } from './friend-request/friend-request.controller';
+import { FriendRequestModule } from './friend-request/friend-request.module';
 
 @Module({
   imports: [
@@ -22,6 +25,7 @@ import { FriendsModule } from './friends/friends.module';
     UserModule,
     SocketModule,
     FriendsModule,
-  ],
+    FriendRequestModule,
+  ]
 })
 export class AppModule {}

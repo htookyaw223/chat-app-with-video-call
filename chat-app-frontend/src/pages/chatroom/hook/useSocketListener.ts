@@ -6,6 +6,7 @@ interface Message {
     text: string;
     timestamp: string;
     isSentByCurrentUser: boolean;
+    friendId: string;
 }
 export const useSocketListener = (socketRef: React.MutableRefObject<Socket | null>) => {
     const [messages, setMessages] = useState<Message[]>([]);
@@ -22,6 +23,7 @@ export const useSocketListener = (socketRef: React.MutableRefObject<Socket | nul
                 text: data.message,
                 timestamp: new Date().toLocaleTimeString(),
                 isSentByCurrentUser: false,
+                friendId: data.sender.payload.userId, // Assuming userId is the sender's ID
             };
             setMessages((prevMessages) => [...prevMessages, newMessage]);
         });

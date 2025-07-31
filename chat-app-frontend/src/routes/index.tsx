@@ -3,6 +3,7 @@ import PageLayout from "../pages";
 import { ChatRoomPage } from "../pages/chatroom";
 import LoginPage from "../pages/auth/login";
 import ChatBoxContainer from "../pages/chatroom/components/ChatBox";
+import { FriendListPage } from "../pages/friends";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -10,11 +11,15 @@ export const router = createBrowserRouter([
     errorElement: <div>error page</div>,
     children: [
       {
-        path: "/messages",
+        path: "/",
         element: <ChatRoomPage />,
         children: [
           { path: ":id", element: <ChatBoxContainer /> }, // Dynamic route for chat with specific user  
         ]
+      },
+      {
+        path: "/friends",
+        element:<FriendListPage />
       },
     ],
   },

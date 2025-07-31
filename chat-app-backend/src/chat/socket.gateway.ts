@@ -48,7 +48,8 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('signal')
   handleSignal(socket: Socket, data: any) {
     console.log('Received signal:', data.type, data.to);
-    socket.broadcast.emit('signal', data);
+    const targetSocketId = this.activeUsers.get(data?.to)?.socketId;
+    this.server.to(targetSocketId).emit('signal', data);
   }
 
   @SubscribeMessage('sendMessage')

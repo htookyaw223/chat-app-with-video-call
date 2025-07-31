@@ -28,6 +28,7 @@ export default function useWebRTC(socketRef: MutableRefObject<Socket | null>, us
         if (socketRef.current) {
           socketRef.current.emit("signal", {
             type: "icecandidate",
+            to: userFriendId,
             candidate: event.candidate,
           });
         }
@@ -54,31 +55,24 @@ export default function useWebRTC(socketRef: MutableRefObject<Socket | null>, us
   }, []);
 
   const endCall = () => {
-    if (socketRef.current) {
-      socketRef.current.off("signal");
-    }
     // Stop all local media tracks
     if (localStream) {
       localStream.getTracks().forEach(track => track.stop());
     }
     setLocalStream(null);
     setRemoteStream(null);
-    // Close peer connection
-    if (peerConnection.current) {
-      peerConnection.current.onicecandidate = null;
-      peerConnection.current.ontrack = null;
-      peerConnection.current.close();
-      peerConnection.current = null;
-    }
   }
 
   // Create an offer to initiate the connection
   const createOffer = () => {
+    console.log("Creating offer...");
     peerConnection.current
       ?.createOffer()
       .then(offer => peerConnection.current?.setLocalDescription(offer))
       .then(() => {
+    console.log("Creating offer...1");
         if (socketRef.current) {
+    console.log("Creating offer...2");
           socketRef.current.emit("signal", {
             to: userFriendId,
             type: "offer",
@@ -140,6 +134,7 @@ export default function useWebRTC(socketRef: MutableRefObject<Socket | null>, us
       .then(stream => {
         setLocalStream(stream);
         stream.getTracks().forEach(track => {
+          console.log("Adding connection", track);
           peerConnection.current?.addTrack(track, stream); // Add tracks to peer connection
         });
         createOffer();
@@ -164,6 +159,7 @@ export default function useWebRTC(socketRef: MutableRefObject<Socket | null>, us
           console.log("Answering call with answer:", peerConnection.current?.localDescription);
           socketRef.current.emit("signal", {
             type: "answer",
+            to: userFriendId,
             answer: peerConnection.current?.localDescription,
           });
         }

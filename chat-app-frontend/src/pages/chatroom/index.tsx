@@ -2,6 +2,7 @@ import { Avatar, Badge, Layout, List, Typography } from "antd";
 import { useGetFriendsQuery, useGetUserProfileQuery } from "../../reduxtoolkit/userApi";
 import { UserOutlined } from "@ant-design/icons";
 import { useNavigate, useOutlet, useParams } from "react-router-dom";
+import { useGetAvailableFriendsQuery } from "../../reduxtoolkit/friendRequestApi";
 
 const { Sider, Content } = Layout;
 const { Title } = Typography;
@@ -17,9 +18,13 @@ export const ChatRoomPage = () => {
   const { data: friends } = useGetFriendsQuery(
     user?.userId || "",
     { refetchOnMountOrArgChange: true, skip: !user?.userId });
+
+  const { data = [], isLoading, refetch } = useGetAvailableFriendsQuery(user?.userId, { skip: !user?.userId });
+
   const outlet = useOutlet();
   const navigate = useNavigate();
   const userId = useParams().id;
+  console.log("User ID from params:", data);
   return (
     <Layout>
       <Sider width={240} theme="light">
@@ -36,25 +41,25 @@ export const ChatRoomPage = () => {
           }}
         >
           <List
-            dataSource={friends}
+            dataSource={data.filter((f: { status: string; name: string, receiver:string, requestId:string, _id:string}) => f.status === "ACCEPTED")}
             itemLayout="horizontal"
-            renderItem={(user: { name: string, isOnline: boolean, userId: string }) => (
+            renderItem={(user: { status: string; name: string, receiver:string, requestId:string, _id:string}) => (
               <List.Item
-                style={{ padding: "10px 16px", backgroundColor: user?.userId === userId ? "#f0f8ff" : "#fff" }}
-                onClick={() => { navigate(`/messages/${user?.userId}`) }}
+                style={{ padding: "10px 16px", backgroundColor: user?._id === userId ? "#f0f8ff" : "#fff" }}
+                onClick={() => { navigate(`/${user?._id}`) }}
               >
                 <List.Item.Meta
                   avatar={
                     <Badge
                       dot
-                      status={user?.isOnline ? "success" : "default"}
+                      // status={user?.isOnline ? "success" : "default"}
                       offset={[-2, 2]}
                     >
                       <Avatar icon={<UserOutlined />} />
                     </Badge>
                   }
                   title={user?.name}
-                  description={user.isOnline ? "Online" : "Offline"}
+                  // description={user.isOnline ? "Online" : "Offline"}
                 />
               </List.Item>
             )}

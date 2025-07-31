@@ -29,6 +29,7 @@ interface Message {
   text: string;
   timestamp: string;
   isSentByCurrentUser: boolean;
+  friendId: string;
 }
 
 const ChatBoxContainer: React.FC = () => {
@@ -98,6 +99,7 @@ const ChatBoxContainer: React.FC = () => {
         text: messageInput,
         timestamp: new Date().toLocaleTimeString(),
         isSentByCurrentUser: true,
+        friendId: userFriendId,
       };
       setIsCurrentUser(!isCurrentUser);
       setMessages([...messages, newMessage]);
@@ -133,44 +135,6 @@ const ChatBoxContainer: React.FC = () => {
           padding: "20px",
         }}
       >
-        <Modal
-          title="Title"
-          open={receivingCall}
-          closable={false}
-          onOk={() => {
-            answerCall();
-            setOpen(true);
-            console.log("Answering call", localVideoRef, remoteVideoRef);
-          }
-          }
-          okText="Answer Call"
-          cancelText="Decline Call"
-        >
-          <p>Someone is calling you</p>
-        </Modal>
-        <Modal
-          open={open}
-          closable={false}
-          style={{ width: '100%', }}
-          width={'100%'}
-          onOk={() => {
-            endCall();
-            setOpen(false);
-            if (localVideoRef.current) {
-              localVideoRef.current.srcObject = null;
-            }
-            if (remoteVideoRef.current) {
-              remoteVideoRef.current.srcObject = null;
-            }
-          }}
-          okText="End Call"
-          cancelButtonProps={{ style: { display: 'none' } }}
-        >
-          <Flex justify="space-between" align="center" style={{ width: '100%' }}>
-            <video ref={localVideoRef} autoPlay muted />
-            <video ref={remoteVideoRef} autoPlay muted />
-          </Flex>
-        </Modal>
         <Flex vertical>
           <Text style={{ color: "#fff", fontSize: "20px" }}>Yamin NgweSin</Text>
           <Text type="warning" strong>
@@ -204,7 +168,7 @@ const ChatBoxContainer: React.FC = () => {
           {/* This empty div will act as a reference point to auto-scroll */}
           <div ref={messageEndRef} />
           <List
-            dataSource={messages}
+            dataSource={messages.filter((message) => message.friendId === userFriendId)}
             renderItem={(message: Message) => (
               <List.Item
                 style={{
@@ -248,6 +212,45 @@ const ChatBoxContainer: React.FC = () => {
           </Button>
         </div>
       </Content>
+      
+        <Modal
+          title="Title"
+          open={receivingCall}
+          closable={false}
+          onOk={() => {
+            answerCall();
+            setOpen(true);
+            console.log("Answering call", localVideoRef, remoteVideoRef);
+          }
+          }
+          okText="Answer Call"
+          cancelText="Decline Call"
+        >
+          <p>Someone is calling you</p>
+        </Modal>
+        <Modal
+          open={open}
+          closable={false}
+          style={{ width: '100%', }}
+          width={'100%'}
+          onOk={() => {
+            endCall();
+            setOpen(false);
+            if (localVideoRef.current) {
+              localVideoRef.current.srcObject = null;
+            }
+            if (remoteVideoRef.current) {
+              remoteVideoRef.current.srcObject = null;
+            }
+          }}
+          okText="End Call"
+          cancelButtonProps={{ style: { display: 'none' } }}
+        >
+          <Flex justify="space-between" align="center" style={{ width: '100%' }}>
+            <video ref={localVideoRef} autoPlay muted={false} />
+            <video ref={remoteVideoRef} autoPlay muted={false} />
+          </Flex>
+        </Modal>
       <Footer style={{ textAlign: "center" }}>
         Titalk ©2024 Created by Htoo Kyaw
       </Footer>

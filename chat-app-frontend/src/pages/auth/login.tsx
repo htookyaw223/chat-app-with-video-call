@@ -21,7 +21,7 @@ const LoginPage = ({}) => {
   useEffect(() => {
     if (isSuccess) {
       localStorage.setItem("token", data.access_token);
-      navigate("/messages");
+      navigate("/");
     }
   }, [isSuccess]);
 

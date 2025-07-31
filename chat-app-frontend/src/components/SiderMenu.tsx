@@ -7,12 +7,14 @@ import {
 import { Layout, Menu } from "antd";
 
 import type { GetProp, MenuProps } from "antd";
+import { useNavigate } from "react-router-dom";
 
 type MenuItem = GetProp<MenuProps, "items">[number];
 
 const { Sider , Footer} = Layout;
 
 const SiderMenu = () => {
+  const navigate = useNavigate();
   const items: MenuItem[] = [
     {
       key: "1",
@@ -21,7 +23,7 @@ const SiderMenu = () => {
         justifyContent: "center",
         height: 70,
       },
-
+      onClick: () => {navigate("/")},
       icon: <MessageOutlined shape="square" style={{ fontSize: 25 }} />,
     },
     {
@@ -31,6 +33,7 @@ const SiderMenu = () => {
         justifyContent: "center",
         height: 70,
       },
+      onClick: () => {navigate("/friends")},
       icon: <UsergroupAddOutlined shape="square" style={{ fontSize: 25 }} />,
     },
     {
