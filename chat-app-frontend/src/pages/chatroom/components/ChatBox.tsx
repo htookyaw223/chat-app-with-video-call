@@ -15,7 +15,7 @@ import {
   VideoCameraAddOutlined,
 } from "@ant-design/icons";
 import { useSocket } from "../../../hook/useSocket";
-import { useGetUserProfileQuery } from "../../../reduxtoolkit/userApi";
+import { useGetFriendProfileQuery, useGetUserProfileQuery } from "../../../reduxtoolkit/userApi";
 import { useParams } from "react-router-dom";
 import useWebRTC from "../hook/useWebRTC";
 import { useSocketListener } from "../hook/useSocketListener";
@@ -35,6 +35,7 @@ interface Message {
 const ChatBoxContainer: React.FC = () => {
   const { data: currentUserData } = useGetUserProfileQuery("", { refetchOnMountOrArgChange: true });
   const userFriendId = useParams().id ?? ""; // Get userId from URL params or use a default
+  const {data: friend, isLoading, isSuccess} = useGetFriendProfileQuery(userFriendId, {refetchOnMountOrArgChange: true, skip: userFriendId === ""});
   const socketRef = useSocket();
   const localVideoRef = useRef<HTMLVideoElement>(null);
   const remoteVideoRef = useRef<HTMLVideoElement>(null);
@@ -136,7 +137,7 @@ const ChatBoxContainer: React.FC = () => {
         }}
       >
         <Flex vertical>
-          <Text style={{ color: "#fff", fontSize: "20px" }}>Yamin NgweSin</Text>
+          <Text style={{ color: "#fff", fontSize: "20px" }}>{friend?.name}</Text>
           <Text type="warning" strong>
             Online
           </Text>

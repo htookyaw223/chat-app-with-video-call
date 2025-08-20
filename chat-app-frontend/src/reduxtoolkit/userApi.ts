@@ -20,7 +20,13 @@ export const userApi = apiWithTags.injectEndpoints({
         method: "GET"
       }),
     }),
+    getFriendProfile: builder.query<any, string>({
+      query: (friendId: string) => ({
+        url: `/user/friends/${friendId}`,
+        method: "GET"
+      }),
+    }),
   }),
 });
 
-export const { useGetFriendsQuery, useGetUserProfileQuery } = userApi;
+export const { useGetFriendsQuery, useGetUserProfileQuery, useGetFriendProfileQuery } = userApi;

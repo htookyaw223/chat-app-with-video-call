@@ -22,9 +22,12 @@ export class UserService {
   async findByUsername(username: string): Promise<User | undefined> {
     return this.userModel.findOne({ username }).exec();
   }
+   async findByUserId(userId: string): Promise<User | undefined> {
+    return this.userModel.findOne({  _id:  userId }).exec();
+  }
 
   async findUsersByIds(userIds: string[]): Promise<User[] | undefined> {
-    return this.userModel.find({ _id: { $in: userIds } }).exec();
+    return this.userModel.find({ _id: { $in: userIds } }, '_id name').exec();
   }
   // user.service.ts
   async getAvailableFriends(userId: string) {
